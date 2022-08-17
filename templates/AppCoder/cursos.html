@@ -1,0 +1,10 @@
+{% extends 'index.html' %}
+
+{% block title %}Cursos{% endblock %}
+
+{% block body %}
+    <h5>Los cursos disponibles son:</h5>
+    {% for key, value in cursos.items %}
+        <p>el curso {{ key }} tiene como nombre {{ value }}</p>
+    {% endfor %}
+{% endblock %}
