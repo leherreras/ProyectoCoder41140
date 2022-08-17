@@ -1,24 +1,20 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
+from AppCoder.dtos import curso_dto
+
 
 def inicio(request):
-    return HttpResponse("Vista inicio")
+    return render(request, 'index.html')
 
 
 def cursos(request):
-    contexto = {
-        'cursos': {
-            'curso1': 'Nombre1',
-            'curso2': 'Nombre2',
-            'curso3': 'Nombre3',
-        }
-    }
-    return render(request, 'cursos.html', contexto)
+
+    return render(request, 'AppCoder/cursos.html', curso_dto)
 
 
 def profesores(request):
-    return render(request, 'profesores.html')
+    return render(request, 'AppCoder/profesores.html')
 
 
 def estudiantes(request):
