@@ -1,7 +1,18 @@
-{% extends "index.html" %}
+{% extends 'index.html' %}
+
+{% block title %}Cursos{% endblock %}
 
 {% block body %}
-el nombre del curso es: {{ nombre }}
-la camada es: {{ camada }}
-{% endblock %}
+    <form action="" method="POST">
+    {% csrf_token %}
+        {{ my_form.as_p }}
 
+        <button class="btn btn-primary btn-lg disabled" id="submitButton" type="submit">Enviar</button>
+        <input type="submit" value="Enviar">
+    </form>
+
+    <h5>Los cursos disponibles son:</h5>
+    {% for curso in cursos %}
+        <p>el curso es: {{ curso.nombre }} camada {{ curso.camada }}</p>
+    {% endfor %}
+{% endblock %}
