@@ -25,7 +25,17 @@ def inicio(request):
     return render(request, 'index.html')
 
 
-def curso(request):
+def curso_leer(request):
+    cursos = Curso.objects.all()
+    contexto = {
+        'cursos': cursos
+    }
+
+    return render(request, 'AppCoder/curso/leer.html', contexto)
+
+
+def curso_editar(request, camada):
+    curso = Curso.objects.get(camada=camada)
 
     if request.method == 'POST':
         my_form = CursoForm(request.POST)
@@ -34,18 +44,51 @@ def curso(request):
 
             data = my_form.cleaned_data
 
-            curso_data = Curso(nombre=data.get('nombre'), camada=data.get('camada'))
-            curso_data.save()
-        else:
-            redirect('AppCoderInicio')
+            curso.nombre = data.get('nombre')
+            curso.camada = data.get('camada')
 
-    cursos = Curso.objects.all()
+            curso.save()
+
+            return redirect('AppCoderCursoLeer')
+
+    curso_form = CursoForm(initial={'nombre': curso.nombre, 'camada': curso.camada})
+
     contexto = {
-        'cursos': cursos,
-        'my_form': CursoForm()
+        'curso_form': curso_form
     }
 
-    return render(request, 'AppCoder/curso.html', contexto)
+    return render(request, 'AppCoder/curso/editar.html', contexto)
+
+
+def curso_grabar(request):
+    if request.method == 'POST':
+        curso_form = CursoForm(request.POST)
+
+        if curso_form.is_valid():
+
+            data = curso_form.cleaned_data
+
+            curso_data = Curso(nombre=data.get('nombre'), camada=data.get('camada'))
+            curso_data.save()
+
+    return redirect('AppCoderCursoLeer')
+
+
+def curso_crear(request):
+
+    contexto = {
+        'curso_form': CursoForm()
+    }
+    return render(request, 'AppCoder/curso/crear.html', contexto)
+
+
+def curso_eliminar(request, camada):
+
+    curso = Curso.objects.get(camada=camada)
+    curso.delete()
+
+    return redirect('AppCoderCursoLeer')
+
 
 
 def profesores(request):
