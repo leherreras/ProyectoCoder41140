@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -6,12 +7,10 @@ from AppCoder.models import Curso
 
 
 def buscar_curso(request):
-
     curso_buscar = []
     if request.method == "POST":
         camada = request.POST.get('camada')
         curso_buscar = Curso.objects.filter(camada__icontains=camada)
-
 
     contexto = {
         'my_form': BuscaCurso(),
@@ -41,7 +40,6 @@ def curso_editar(request, camada):
         my_form = CursoForm(request.POST)
 
         if my_form.is_valid():
-
             data = my_form.cleaned_data
 
             curso.nombre = data.get('nombre')
@@ -65,7 +63,6 @@ def curso_grabar(request):
         curso_form = CursoForm(request.POST)
 
         if curso_form.is_valid():
-
             data = curso_form.cleaned_data
 
             curso_data = Curso(nombre=data.get('nombre'), camada=data.get('camada'))
@@ -74,8 +71,8 @@ def curso_grabar(request):
     return redirect('AppCoderCursoLeer')
 
 
+@login_required
 def curso_crear(request):
-
     contexto = {
         'curso_form': CursoForm()
     }
@@ -83,12 +80,10 @@ def curso_crear(request):
 
 
 def curso_eliminar(request, camada):
-
     curso = Curso.objects.get(camada=camada)
     curso.delete()
 
     return redirect('AppCoderCursoLeer')
-
 
 
 def profesores(request):
