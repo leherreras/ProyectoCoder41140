@@ -7,6 +7,7 @@
 
         {% if user.is_authenticated %}
             <h5>User: {{ user.get_username }}</h5>
+            <img src="{{ user.avatar.imagen.url }}" alt="">
             <a class="btn btn-primary" href="{% url 'UserCoderLogout' %}">Logout</a>
         {% else %}
             <a class="btn btn-primary" href="{% url 'UserCoderLogin' %}">Login</a>
