@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 
 from UserCoder.forms import UserRegisterForm, AvatarForm
@@ -38,7 +38,6 @@ def login_request(request):
 
 
 def register(request):
-
     if request.method == 'POST':
 
         form = UserRegisterForm(request.POST, request.FILES)

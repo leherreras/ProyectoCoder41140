@@ -7,7 +7,7 @@ from UserCoder.models import Avatar
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField()
-    imagen = forms.ImageField()
+    imagen = forms.ImageField(required=False)
 
     class Meta:
         model = User
