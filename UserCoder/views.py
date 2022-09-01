@@ -3,7 +3,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.shortcuts import render, redirect
 
-from UserCoder.forms import UserRegisterForm
+from UserCoder.forms import UserRegisterForm, AvatarForm
+from UserCoder.models import Avatar
 
 
 def login_request(request):
@@ -40,12 +41,15 @@ def register(request):
 
     if request.method == 'POST':
 
-        # form = UserCreationForm(request.POST)
-        form = UserRegisterForm(request.POST)
+        form = UserRegisterForm(request.POST, request.FILES)
 
         if form.is_valid():
 
-            form.save()
+            user = form.save()
+
+            avatar = Avatar(user=user, imagen=form.cleaned_data.get('imagen'))
+            avatar.save()
+
             messages.info(request, 'Tu usuario fue registrado satisfactoriamente!')
         else:
             messages.info(request, 'Tu usuario no puso ser registrado!')
@@ -58,3 +62,30 @@ def register(request):
     }
 
     return render(request, 'UserCoder/login.html', contexto)
+
+
+def upload_avatar(request):
+    if request.method == "POST":
+
+        formulario = AvatarForm(request.POST, request.FILES)
+
+        if formulario.is_valid():
+
+            data = formulario.cleaned_data
+            avatar = Avatar.objects.filter(user=data.get("usuario"))
+
+            if len(avatar) > 0:
+                avatar = avatar[0]
+                avatar.imagen = formulario.cleaned_data["imagen"]
+                avatar.save()
+
+            else:
+                avatar = Avatar(user=data.get("user"), imagen=data.get("imagen"))
+                avatar.save()
+
+        return redirect("AppCoderInicio")
+
+    contexto = {
+        "form": AvatarForm()
+    }
+    return render(request, "UserCoder/avatar.html", contexto)
